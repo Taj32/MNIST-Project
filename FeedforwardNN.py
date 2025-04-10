@@ -12,8 +12,10 @@ class FeedforwardNN(nn.Module):
         self.model = nn.Sequential(
             nn.Linear(28*28, 128),   # Input layer → Hidden layer 1
             nn.ReLU(),
+            nn.Dropout(0.2),         # Dropout layer
             nn.Linear(128, 64),      # Hidden layer 1 → Hidden layer 2
             nn.ReLU(),
+            nn.Dropout(0.2),         # Dropout layer
             nn.Linear(64, 10)        # Hidden layer 2 → Output layer (10 classes)
         )
     

@@ -9,8 +9,13 @@ import torchvision.transforms as transforms
 from FeedforwardNN import FeedforwardNN
 
 # load in MNSIT data.
-
-transform = transforms.ToTensor()
+# Add normalization to the transform
+transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),  # Ensure the image is grayscale
+    transforms.Resize((28, 28)), 
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,))  # Normalize to mean 0.5 and std 0.5
+])
 
 train_set = torchvision.datasets.MNIST(root='./data', train=True, download=True, transform=transform)
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=64, shuffle=True)
@@ -24,12 +29,13 @@ model = FeedforwardNN()
 
 # Calculate the entropy / loss
 loss_fn = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001) # adam optimizer
+optimizer = optim.Adam(model.parameters(), lr=0.0001) # adam optimizer
 
 # training loop
-for epoch in range(5):  # train for 5 epochs
+for epoch in range(20):  # train for 5 epochs
     total_loss = 0
     for images, labels in train_loader:
+        images = images.view(-1, 28*28)  # Flatten the images
         outputs = model(images)
         loss = loss_fn(outputs, labels)
 
@@ -46,6 +52,7 @@ correct = 0
 total = 0
 with torch.no_grad():
     for images, labels in test_loader:
+        images = images.view(-1, 28*28)  # Flatten the images
         outputs = model(images)
         _, predicted = torch.max(outputs, 1)
         total += labels.size(0)
