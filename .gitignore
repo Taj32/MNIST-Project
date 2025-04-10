@@ -1,0 +1,6 @@
+MNIST_CSV/mnist_train.csv
+MNIST_CSV/generate_mnist_csv.py
+MNIST_CSV.zip
+MNIST_CSV/mnist_test.csv
+MNIST_CSV/readme.md
+__pycache__/FeedforwardNN.cpython-312.pyc
